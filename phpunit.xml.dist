@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="Sitemap test suite">
             <directory>./tests</directory>
+
         </testsuite>
     </testsuites>
 </phpunit>

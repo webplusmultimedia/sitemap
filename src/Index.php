@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace SamDark\Sitemap;
 
 use XMLWriter;
@@ -13,22 +14,22 @@ class Index
     /**
      * @var XMLWriter
      */
-    private $writer;
+    private XMLWriter $writer;
 
     /**
      * @var string index file path
      */
-    private $filePath;
+    private string $filePath;
 
     /**
      * @var bool whether to gzip the resulting file or not
      */
-    private $useGzip = false;
+    private bool $useGzip = false;
 
     /**
      * @param string $filePath index file path
      */
-    public function __construct($filePath)
+    public function __construct(string $filePath)
     {
         $this->filePath = $filePath;
     }
@@ -45,15 +46,14 @@ class Index
         $this->writer->startElement('sitemapindex');
         $this->writer->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
     }
-
-    /**
-     * Adds sitemap link to the index file
-     *
-     * @param string $location URL of the sitemap
-     * @param integer $lastModified unix timestamp of sitemap modification time
-     * @throws \InvalidArgumentException
-     */
-    public function addSitemap($location, $lastModified = null): void
+	
+	/**
+	 * Adds sitemap link to the index file
+	 *
+	 * @param string $location URL of the sitemap
+	 * @param int|null $lastModified unix timestamp of sitemap modification time
+	 */
+    public function addSitemap(string $location, int $lastModified = null): void
     {
         if ($this->writer === null) {
             $this->createNewFile();

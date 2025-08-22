@@ -142,7 +142,7 @@ class SitemapTest extends TestCase
 
         $this->assertFileExists($fileName);
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
-        $this->assertRegExp('!application/(x-)?gzip!', $finfo->file($fileName));
+        $this->assertMatchesRegularExpression('!application/(x-)?gzip!', $finfo->file($fileName));
         $this->assertValidXml('compress.zlib://' . $fileName, 'sitemap');
         $this->assertIsOneMemberGzipFile($fileName);
     }
@@ -177,7 +177,7 @@ class SitemapTest extends TestCase
         foreach ($expectedFiles as $expectedFile) {
 
             $this->assertFileExists($expectedFile, "$expectedFile does not exist!");
-            $this->assertRegExp('!application/(x-)?gzip!', $finfo->file($expectedFile));
+            $this->assertMatchesRegularExpression('!application/(x-)?gzip!', $finfo->file($expectedFile));
             $this->assertValidXml('compress.zlib://' . $expectedFile, 'sitemap');
             $this->assertIsOneMemberGzipFile($expectedFile);
         }

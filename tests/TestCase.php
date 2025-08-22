@@ -19,8 +19,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
         return $path;
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+	{
         foreach ($this->tempPaths as $tempPath) {
             @unlink($tempPath);
         }
