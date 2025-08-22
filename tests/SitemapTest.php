@@ -29,18 +29,18 @@ class SitemapTest extends TestCase
         $fileName = $this->getTempPath('testWritingFile.xml');
 
         $sitemap = new Sitemap($fileName);
-        $sitemap->addUrl(new Url('http://example.com/mylink1'));
+        $sitemap->addUrl(Url::make('http://example.com/mylink1'));
         $sitemap->addUrl(
-            (new Url('http://example.com/mylink2'))
+            (Url::make('http://example.com/mylink2'))
                 ->setLastModified(new \DateTime())
         );
         $sitemap->addUrl(
-            (new Url('http://example.com/mylink3'))
+            (Url::make('http://example.com/mylink3'))
                 ->setLastModified(new \DateTime())
                 ->setChangeFrequency(Frequency::HOURLY)
         );
         $sitemap->addUrl(
-            (new Url('http://example.com/mylink4'))
+            (Url::make('http://example.com/mylink4'))
                 ->setChangeFrequency(Frequency::DAILY)
                 ->setLastModified(new \DateTime())
                 ->setPriority(0.3)
@@ -58,7 +58,7 @@ class SitemapTest extends TestCase
 
         for ($i = 0; $i < 20; $i++) {
             $sitemap->addUrl(
-                (new Url('http://example.com/mylink' . $i))
+                (Url::make('http://example.com/mylink' . $i))
                     ->setLastModified(new \DateTime())
             );
         }
@@ -93,7 +93,7 @@ class SitemapTest extends TestCase
         $fileName = $this->getTempPath('testMultiLanguageSitemap.xml');
         $sitemap = new Sitemap($fileName, [AlternateLink::class]);
         $sitemap->addUrl(
-            (new Url('http://example.com/en/mylink2'))
+            (Url::make('http://example.com/en/mylink2'))
                 ->setLastModified(new \DateTime())
                 ->setChangeFrequency(Frequency::HOURLY)
                 ->add(new AlternateLink('en', 'http://example.com/en/mylink2'))
@@ -116,7 +116,7 @@ class SitemapTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $sitemap->addUrl(
-            (new Url('http://example.com/mylink1'))
+            (Url::make('http://example.com/mylink1'))
                 ->setPriority(2.0)
         );
     }
@@ -126,7 +126,7 @@ class SitemapTest extends TestCase
         $fileName = $this->getTempPath('testWritingFileGzipped.xml.gz');
         $sitemap = new Sitemap($fileName);
         $sitemap->setUseGzip(true);
-        $sitemap->addUrl(new Url('http://example.com/mylink1'));
+        $sitemap->addUrl(Url::make('http://example.com/mylink1'));
         $sitemap->write();
 
         $this->assertFileExists($fileName);
@@ -144,7 +144,7 @@ class SitemapTest extends TestCase
 
         for ($i = 0; $i < 20; $i++) {
             $sitemap->addUrl(
-                (new Url('http://example.com/mylink' . $i))
+                (Url::make('http://example.com/mylink' . $i))
                     ->setLastModified(new \DateTime())
             );
         }
@@ -186,7 +186,7 @@ class SitemapTest extends TestCase
 
         for ($i = 0; $i < 20; $i++) {
             $sitemap->addUrl(
-                (new Url('http://example.com/mylink' . $i))
+                (Url::make('http://example.com/mylink' . $i))
                     ->setLastModified(new \DateTime())
             );
         }
@@ -218,7 +218,7 @@ class SitemapTest extends TestCase
         $sitemap = new Sitemap($fileName);
         $sitemap->setMaxBytes(0);
         $sitemap->setBufferSize(1);
-        $sitemap->addUrl(new Url('http://example.com/mylink1'));
+        $sitemap->addUrl(Url::make('http://example.com/mylink1'));
         $sitemap->write();
     }
 
@@ -240,7 +240,7 @@ class SitemapTest extends TestCase
             $sitemap->setBufferSize($bufferSize);
             for ($i = 0; $i < 50000; $i++) {
                 $sitemap->addUrl(
-                    (new Url('http://example.com/mylink' . $i))
+                    (Url::make('http://example.com/mylink' . $i))
                         ->setLastModified(new \DateTime())
                 );
             }

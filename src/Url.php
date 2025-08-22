@@ -38,7 +38,7 @@ class Url
     /**
      * @var ExtensionInterface[]
      */
-    private $extensionItems = [];
+    private array $extensionItems = [];
 
     /**
      * Item constructor.
@@ -48,6 +48,11 @@ class Url
     {
         $this->location = $location;
     }
+	
+	public static function make(string $location): static
+	{
+		return new self($location);
+	}
 
     /**
      * @return string

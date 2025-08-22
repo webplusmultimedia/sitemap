@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace SamDark\Sitemap;
 
+use SamDark\Sitemap\Extension\ExtensionInterface;
 use SamDark\Sitemap\Writer\DeflateWriter;
 use SamDark\Sitemap\Writer\PlainFileWriter;
 use SamDark\Sitemap\Writer\TempFileGZIPWriter;
@@ -35,10 +36,7 @@ class Sitemap
      */
     private int $byteCount = 0;
 
-    /**
-     * @var string path to the file to be written
-     */
-    private string $filePath;
+  
 
     /**
      * @var integer number of files written
@@ -73,25 +71,23 @@ class Sitemap
     
     protected ?XMLWriter $writer = NULL;
 
-    private array $extensionClasses = [];
+    
 
     /**
      * @param string $filePath path of the file to write to
-     * @param array $extensionClasses
+     * @param array<class-string> $extensionClasses
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(string $filePath, array $extensionClasses = [])
+    public function __construct(
+		private string $filePath, private array $extensionClasses = [])
     {
-        $dir = \dirname($filePath);
+        $dir = \dirname($this->filePath);
         if (!is_dir($dir)) {
             throw new \InvalidArgumentException(
                 "Please specify valid file path. Directory not exists. You have specified: {$dir}."
             );
         }
-
-        $this->filePath = $filePath;
-        $this->extensionClasses = $extensionClasses;
     }
 
     /**
