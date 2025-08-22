@@ -120,6 +120,13 @@ class SitemapTest extends TestCase
                 ->setPriority(2.0)
         );
     }
+	
+	public function testExtensionsValidation()
+	{
+		$fileName = $this->getTempPath('testExtensionsValidation.xml');
+		$this->expectException(InvalidArgumentException::class);
+		new Sitemap($fileName, [Frequency::class]);
+	}
 
     public function testWritingFileGzipped()
     {

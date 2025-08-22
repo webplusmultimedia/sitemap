@@ -82,13 +82,9 @@ class Sitemap
     public function __construct(
 		private string $filePath, private array $extensionClasses = [])
     {
-        $dir = \dirname($this->filePath);
-        if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(
-                "Please specify valid file path. Directory not exists. You have specified: {$dir}."
-            );
-        }
-    }
+		$this->validateFilePath();
+		$this->validateExtensions();
+	}
 
     /**
      * Get array of generated files
@@ -375,4 +371,28 @@ class Sitemap
             $extensionClass::writeXmlNamepsace($this->writer);
         }
     }
+	
+	/**
+	 * @return void
+	 */
+	private function validateFilePath(): void
+	{
+		$dir = \dirname($this->filePath);
+		if (! is_dir($dir)) {
+			throw new \InvalidArgumentException(
+				"Please specify valid file path. Directory not exists. You have specified: {$dir}."
+			);
+		}
+	}
+	
+	private function validateExtensions(): void
+	{
+		foreach ($this->extensionClasses as $extensionClass) {
+			if (! is_subclass_of($extensionClass, ExtensionInterface::class)) {
+				throw new \InvalidArgumentException(
+					"Please specify valid extension class. Class must implement ExtensionInterface. You have specified: {$extensionClass}."
+				);
+			}
+		}
+	}
 }
