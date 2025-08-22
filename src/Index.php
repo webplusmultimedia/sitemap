@@ -14,7 +14,7 @@ class Index
     /**
      * @var XMLWriter
      */
-    private XMLWriter $writer;
+    private ?XMLWriter $writer = NULL;
 
     /**
      * @var string index file path

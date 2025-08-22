@@ -4,7 +4,7 @@ namespace SamDark\Sitemap\tests;
 
 use InvalidArgumentException;
 use OverflowException;
-use SamDark\Sitemap\Frequency;
+use SamDark\Sitemap\Enums\Frequency;
 use SamDark\Sitemap\Extension\AlternateLink;
 use SamDark\Sitemap\Url;
 
@@ -106,18 +106,7 @@ class SitemapTest extends TestCase
         $this->assertValidXml($fileName, 'sitemap_xhtml');
     }
 
-
-    public function testFrequencyValidation()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $fileName = $this->getTempPath('testFrequencyValidation.xml');
-        $sitemap = new Sitemap($fileName);
-        $sitemap->addUrl(
-            (new Url('http://example.com/mylink2'))
-                ->setChangeFrequency('invalid')
-        );
-    }
+	
 
     public function testPriorityValidation()
     {

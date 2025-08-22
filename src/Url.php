@@ -1,7 +1,8 @@
 <?php
-
+declare(strict_types=1);
 namespace SamDark\Sitemap;
 
+use SamDark\Sitemap\Enums\Frequency;
 use SamDark\Sitemap\Extension\ExtensionInterface;
 
 /**
@@ -12,17 +13,17 @@ class Url
     /**
      * @var string URL of the page
      */
-    private $location;
+    private string $location;
 
     /**
-     * @var \DateTimeInterface last modification timestamp
+     *  last modification timestamp
      */
-    private $lastModified;
+    private ?\DateTimeInterface $lastModified = null;
 
     /**
-     * @var string change frequency. Use one of constants from Frequency
+     * @var Frequency change frequency. Use one of constants from Frequency
      */
-    private $changeFrequency;
+    private ?Frequency $changeFrequency = null;
 
     /**
      * @var float priority (0.0-1.0). Default is 0.5.
@@ -85,29 +86,17 @@ class Url
     }
 
     /**
-     * @return string
+     * @return ?Frequency
      */
-    public function getChangeFrequency(): ?string
+    public function getChangeFrequency():  Frequency | null
     {
         return $this->changeFrequency;
     }
-
-    /**
-     * @param string $changeFrequency
-     * @return Url
-     * @throws \InvalidArgumentException
-     */
-    public function setChangeFrequency(string $changeFrequency): Url
+	
+    public function setChangeFrequency(Frequency $changeFrequency): Url
     {
-        if (!\in_array($changeFrequency, Frequency::all(), true)) {
-            throw new \InvalidArgumentException(
-                'Please specify valid changeFrequency. Valid values are: '
-                . implode(', ', Frequency::all())
-                . "You have specified: {$changeFrequency}."
-            );
-        }
-
         $this->changeFrequency = $changeFrequency;
+		
         return $this;
     }
 

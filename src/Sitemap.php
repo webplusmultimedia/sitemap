@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace SamDark\Sitemap;
 
 use SamDark\Sitemap\Writer\DeflateWriter;
@@ -17,64 +18,62 @@ class Sitemap
     /**
      * @var integer Maximum allowed number of URLs in a single file.
      */
-    protected $maxUrls = 50000;
+    protected int $maxUrls = 50000;
 
     /**
      * @var integer number of URLs added
      */
-    protected $urlsCount = 0;
+    protected int $urlsCount = 0;
 
     /**
      * @var integer Maximum allowed number of bytes in a single file.
      */
-    private $maxBytes = 10485760;
+    private int $maxBytes = 10485760;
 
     /**
      * @var integer number of bytes already written to the current file, before compression
      */
-    private $byteCount = 0;
+    private int $byteCount = 0;
 
     /**
      * @var string path to the file to be written
      */
-    private $filePath;
+    private string $filePath;
 
     /**
      * @var integer number of files written
      */
-    protected $fileCount = 0;
+    protected int $fileCount = 0;
 
     /**
      * @var array path of files written
      */
-    protected $writtenFilePaths = [];
+    protected array $writtenFilePaths = [];
 
     /**
      * @var integer number of URLs to be kept in memory before writing it to file
      */
-    protected $bufferSize = 10;
+    protected int $bufferSize = 10;
 
     /**
      * @var bool if XML should be indented
      */
-    protected $useIndent = true;
+    protected bool $useIndent = true;
 
     /**
      * @var bool whether to gzip the resulting files or not
      */
-    protected $useGzip = false;
+    protected bool $useGzip = false;
 
     /**
-     * @var WriterInterface that does the actual writing
+     * @var ?WriterInterface that does the actual writing
      */
-    protected $writerBackend;
+    protected ?WriterInterface $writerBackend = null;
 
-    /**
-     * @var XMLWriter
-     */
-    protected $writer;
+    
+    protected ?XMLWriter $writer = NULL;
 
-    private $extensionClasses;
+    private array $extensionClasses = [];
 
     /**
      * @param string $filePath path of the file to write to
@@ -82,7 +81,7 @@ class Sitemap
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($filePath, array $extensionClasses = [])
+    public function __construct(string $filePath, array $extensionClasses = [])
     {
         $dir = \dirname($filePath);
         if (!is_dir($dir)) {
@@ -182,10 +181,11 @@ class Sitemap
      * Flushes buffer into file
      *
      * @param int $footSize Size of the remaining closing tags
+     *
      * @throws \RuntimeException
      * @throws \OverflowException
      */
-    protected function flush($footSize = 10): void
+    protected function flush(int $footSize = 10): void
     {
         $data = $this->writer->flush();
         $dataSize = mb_strlen($data, '8bit');
@@ -250,7 +250,7 @@ class Sitemap
         }
 
         if ($url->getChangeFrequency() !== null) {
-            $this->writer->writeElement('changefreq', $url->getChangeFrequency());
+            $this->writer->writeElement('changefreq', $url->getChangeFrequency()->value);
         }
 
         $this->writer->writeElement('priority', number_format($url->getPriority(), 1));
@@ -290,9 +290,10 @@ class Sitemap
      * Returns an array of URLs written
      *
      * @param string $baseUrl base URL of all the sitemaps written
+     *
      * @return array URLs of sitemaps written
      */
-    public function getSitemapUrls($baseUrl): array
+    public function getSitemapUrls(string $baseUrl): array
     {
         $urls = [];
         foreach ($this->writtenFilePaths as $file) {
@@ -304,9 +305,10 @@ class Sitemap
     /**
      * Sets maximum number of URLs to write in a single file.
      * Default is 50000.
+     *
      * @param integer $number
      */
-    public function setMaxUrls($number): void
+    public function setMaxUrls(int $number): void
     {
         $this->maxUrls = (int)$number;
     }
@@ -314,11 +316,12 @@ class Sitemap
     /**
      * Sets maximum number of bytes to write in a single file.
      * Default is 10485760 or 10 MiB.
+     *
      * @param integer $number
      */
-    public function setMaxBytes($number): void
+    public function setMaxBytes(int $number): void
     {
-        $this->maxBytes = (int)$number;
+        $this->maxBytes = $number;
     }
 
     /**
@@ -327,7 +330,7 @@ class Sitemap
      *
      * @param integer $number
      */
-    public function setBufferSize($number): void
+    public function setBufferSize(int $number): void
     {
         $this->bufferSize = (int)$number;
     }
@@ -338,18 +341,20 @@ class Sitemap
      *
      * @param bool $value
      */
-    public function setUseIndent($value): void
+    public function setUseIndent(bool $value): void
     {
         $this->useIndent = (bool)$value;
     }
 
     /**
      * Sets whether the resulting files will be gzipped or not.
+     *
      * @param bool $value
+     *
      * @throws \RuntimeException when trying to enable gzip while zlib is not available or when trying to change
      * setting when some items are already written
      */
-    public function setUseGzip($value): void
+    public function setUseGzip(bool $value): void
     {
         if ($value && !\extension_loaded('zlib')) {
             throw new \RuntimeException('Zlib extension must be enabled to gzip the sitemap.');
