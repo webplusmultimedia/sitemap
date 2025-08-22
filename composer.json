@@ -19,13 +19,13 @@
     },
     "require": {
         "php": "^7.1 || ^8.3",
-        "ext-xmlwriter": "*",
-        "ext-zlib": "*"
+        "ext-xmlwriter": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "~7.1.5||^10.0",
         "vimeo/psalm": "*",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-zlib": "*"
     },
     "autoload": {
         "psr-4": {

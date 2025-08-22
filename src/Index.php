@@ -94,10 +94,12 @@ class Index
 
     /**
      * Sets whether the resulting file will be gzipped or not.
+     *
      * @param bool $value
+     *
      * @throws \RuntimeException when trying to enable gzip while zlib is not available
      */
-    public function setUseGzip($value): void
+    public function setUseGzip(bool $value): void
     {
         if ($value && !\extension_loaded('zlib')) {
             throw new \RuntimeException('Zlib extension must be installed to gzip the sitemap.');
