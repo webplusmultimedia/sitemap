@@ -8,7 +8,7 @@ use SamDark\Sitemap\Extension\ExtensionInterface;
 /**
  * A single page URL within a sitemap
  */
-class Url
+final class Url
 {
     /**
      * @var string URL of the page
