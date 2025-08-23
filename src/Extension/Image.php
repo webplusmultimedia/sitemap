@@ -8,7 +8,7 @@ namespace SamDark\Sitemap\Extension;
  * Image extension
  * @see https://support.google.com/webmasters/answer/178636
  */
-class Image implements ExtensionInterface
+final class Image implements ExtensionInterface
 {
     private const int LIMIT = 1000;
 
@@ -48,7 +48,7 @@ class Image implements ExtensionInterface
         $this->location = $location;
     }
 	
-	public static function make(string $location): static
+	public static function make(string $location): Image
 	{
 		return new static($location);
     }
@@ -60,9 +60,11 @@ class Image implements ExtensionInterface
     /**
      * @param string $caption
      */
-    public function setCaption(string $caption): void
+    public function setCaption(string $caption): Image
     {
         $this->caption = $caption;
+		
+		return $this;
     }
 
     /**
@@ -76,9 +78,11 @@ class Image implements ExtensionInterface
     /**
      * @param string $geoLocation
      */
-    public function setGeoLocation(string $geoLocation): void
+    public function setGeoLocation(string $geoLocation): Image
     {
         $this->geoLocation = $geoLocation;
+		
+		return $this;
     }
 
     /**
@@ -92,9 +96,11 @@ class Image implements ExtensionInterface
     /**
      * @param string $title
      */
-    public function setTitle($title): void
+    public function setTitle($title): Image
     {
         $this->title = $title;
+		
+		return $this;
     }
 
     /**
@@ -108,9 +114,11 @@ class Image implements ExtensionInterface
     /**
      * @param string $license
      */
-    public function setLicense(string $license): void
+    public function setLicense(string $license): Image
     {
         $this->license = $license;
+		
+		return $this;
     }
 
     /**
