@@ -14,7 +14,7 @@ use XMLWriter;
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
  */
-class Sitemap
+final class Sitemap
 {
     /**
      * @var integer Maximum allowed number of URLs in a single file.
@@ -84,6 +84,11 @@ class Sitemap
     {
 		$this->validateFilePath();
 		$this->validateExtensions();
+	}
+	
+	public static function make(string $filePath, array $extensionClasses = []): static
+	{
+		return new static($filePath, $extensionClasses);
 	}
 
     /**

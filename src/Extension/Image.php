@@ -10,34 +10,34 @@ namespace SamDark\Sitemap\Extension;
  */
 class Image implements ExtensionInterface
 {
-    private const LIMIT = 1000;
+    private const int LIMIT = 1000;
 
     /**
      * @var string URL of the image.
      */
-    private $location;
+    private string $location;
 
     /**
      * @var string Caption of the image.
      */
-    private $caption;
+    private string $caption;
 
     /**
      * @var string Geographic location of the image.
      *
      * For example, "Limerick, Ireland".
      */
-    private $geoLocation;
+    private string $geoLocation;
 
     /**
      * @var string Title of the image.
      */
-    private $title;
+    private string $title;
 
     /**
      * @var string URL to the license of the image.
      */
-    private $license;
+    private string $license;
 
     /**
      * Image constructor.
@@ -47,10 +47,11 @@ class Image implements ExtensionInterface
     {
         $this->location = $location;
     }
-
-    /**
-     * @return string
-     */
+	
+	public static function make(string $location): static
+	{
+		return new static($location);
+    }
     public function getCaption(): string
     {
         return $this->caption;

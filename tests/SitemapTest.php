@@ -28,7 +28,7 @@ class SitemapTest extends TestCase
     {
         $fileName = $this->getTempPath('testWritingFile.xml');
 
-        $sitemap = new Sitemap($fileName);
+        $sitemap = Sitemap::make($fileName);
         $sitemap->addUrl(Url::make('http://example.com/mylink1'));
         $sitemap->addUrl(
             (Url::make('http://example.com/mylink2'))
@@ -53,7 +53,7 @@ class SitemapTest extends TestCase
 
     public function testMultipleFiles()
     {
-        $sitemap = new Sitemap($this->getTempPath('/testMultipleFiles.xml'));
+        $sitemap = Sitemap::make($this->getTempPath('/testMultipleFiles.xml'));
         $sitemap->setMaxUrls(2);
 
         for ($i = 0; $i < 20; $i++) {
@@ -91,13 +91,13 @@ class SitemapTest extends TestCase
     public function testMultiLanguageSitemap()
     {
         $fileName = $this->getTempPath('testMultiLanguageSitemap.xml');
-        $sitemap = new Sitemap($fileName, [AlternateLink::class]);
+        $sitemap = Sitemap::make($fileName, [AlternateLink::class]);
         $sitemap->addUrl(
             (Url::make('http://example.com/en/mylink2'))
                 ->setLastModified(new \DateTime())
                 ->setChangeFrequency(Frequency::HOURLY)
-                ->add(new AlternateLink('en', 'http://example.com/en/mylink2'))
-                ->add(new AlternateLink('ru', 'http://example.com/ru/mylink2'))
+                ->add(AlternateLink::make('en', 'http://example.com/en/mylink2'))
+                ->add(AlternateLink::make('ru', 'http://example.com/ru/mylink2'))
         );
 
         $sitemap->write();
@@ -111,7 +111,7 @@ class SitemapTest extends TestCase
     public function testPriorityValidation()
     {
         $fileName = $this->getTempPath('testPriorityValidation.xml');
-        $sitemap = new Sitemap($fileName);
+        $sitemap = Sitemap::make($fileName);
 
         $this->expectException(InvalidArgumentException::class);
 
@@ -125,13 +125,13 @@ class SitemapTest extends TestCase
 	{
 		$fileName = $this->getTempPath('testExtensionsValidation.xml');
 		$this->expectException(InvalidArgumentException::class);
-		new Sitemap($fileName, [Frequency::class]);
+		Sitemap::make($fileName, [Frequency::class]);
 	}
 
     public function testWritingFileGzipped()
     {
         $fileName = $this->getTempPath('testWritingFileGzipped.xml.gz');
-        $sitemap = new Sitemap($fileName);
+        $sitemap = Sitemap::make($fileName);
         $sitemap->setUseGzip(true);
         $sitemap->addUrl(Url::make('http://example.com/mylink1'));
         $sitemap->write();
@@ -145,7 +145,7 @@ class SitemapTest extends TestCase
 
     public function testMultipleFilesGzipped()
     {
-        $sitemap = new Sitemap($this->getTempPath('testMultipleFilesGzipped.xml.gz'));
+        $sitemap = Sitemap::make($this->getTempPath('testMultipleFilesGzipped.xml.gz'));
         $sitemap->setUseGzip(true);
         $sitemap->setMaxUrls(2);
 
@@ -186,7 +186,7 @@ class SitemapTest extends TestCase
 
     public function testFileSizeLimit()
     {
-        $sitemap = new Sitemap($this->getTempPath('testFileSizeLimit.xml'));
+        $sitemap = Sitemap::make($this->getTempPath('testFileSizeLimit.xml'));
         $sizeLimit = 1036;
         $sitemap->setMaxBytes($sizeLimit);
         $sitemap->setBufferSize(1);
@@ -222,7 +222,7 @@ class SitemapTest extends TestCase
         $this->expectException(OverflowException::class);
 
         $fileName = $this->getTempPath('testSmallSizeLimit.xml');
-        $sitemap = new Sitemap($fileName);
+        $sitemap = Sitemap::make($fileName);
         $sitemap->setMaxBytes(0);
         $sitemap->setBufferSize(1);
         $sitemap->addUrl(Url::make('http://example.com/mylink1'));
@@ -243,7 +243,7 @@ class SitemapTest extends TestCase
         foreach ([1000, 10] as $bufferSize) {
             $startTime = microtime(true);
 
-            $sitemap = new Sitemap($fileName);
+            $sitemap = Sitemap::make($fileName);
             $sitemap->setBufferSize($bufferSize);
             for ($i = 0; $i < 50000; $i++) {
                 $sitemap->addUrl(
